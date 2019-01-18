@@ -7,12 +7,13 @@ import hudson.plugins.git.GitException;
 import hudson.plugins.git.GitSCM;
 import hudson.plugins.git.extensions.GitSCMExtension;
 import hudson.plugins.git.extensions.GitSCMExtensionDescriptor;
-import java.io.IOException;
-import java.util.List;
 import org.eclipse.jgit.transport.RemoteConfig;
 import org.jenkinsci.plugins.gitclient.CheckoutCommand;
 import org.jenkinsci.plugins.gitclient.GitClient;
 import org.kohsuke.stapler.DataBoundConstructor;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * git-lfs-pull after the checkout.
@@ -20,8 +21,21 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * @author Matt Hauck
  */
 public class GitLFSPull extends GitSCMExtension {
+    private final String fetchInclude;
+    private final String fetchExclude;
+
     @DataBoundConstructor
-    public GitLFSPull() {
+    public GitLFSPull(String fetchInclude, String fetchExclude) {
+        this.fetchInclude = fetchInclude;
+        this.fetchExclude = fetchExclude;
+    }
+
+    public String getFetchInclude() {
+        return fetchInclude;
+    }
+
+    public String getFetchExclude() {
+        return fetchExclude;
     }
 
     /**
@@ -42,6 +56,7 @@ public class GitLFSPull extends GitSCMExtension {
             // in a single job definition.
             cmd.lfsRemote(repos.get(0).getName());
         }
+        cmd.lfsFetchOptions(fetchInclude, fetchExclude);
     }
 
     /**
@@ -55,7 +70,11 @@ public class GitLFSPull extends GitSCMExtension {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        return o instanceof GitLFSPull;
+
+        GitLFSPull that = (GitLFSPull) o;
+
+        if (fetchInclude != null ? !fetchInclude.equals(that.fetchInclude) : that.fetchInclude != null) return false;
+        return fetchExclude != null ? fetchExclude.equals(that.fetchExclude) : that.fetchExclude == null;
     }
 
     /**
@@ -63,7 +82,9 @@ public class GitLFSPull extends GitSCMExtension {
      */
     @Override
     public int hashCode() {
-        return GitLFSPull.class.hashCode();
+        int result = fetchInclude != null ? fetchInclude.hashCode() : 0;
+        result = 31 * result + (fetchExclude != null ? fetchExclude.hashCode() : 0);
+        return result;
     }
 
     /**
@@ -71,7 +92,10 @@ public class GitLFSPull extends GitSCMExtension {
      */
     @Override
     public String toString() {
-        return "GitLFSPull{}";
+        return "GitLFSPull{" +
+                "fetchInclude='" + fetchInclude + '\'' +
+                ", fetchExclude='" + fetchExclude + '\'' +
+                '}';
     }
 
     @Extension

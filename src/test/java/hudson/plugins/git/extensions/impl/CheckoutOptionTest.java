@@ -1,26 +1,19 @@
 package hudson.plugins.git.extensions.impl;
 
 import com.cloudbees.plugins.credentials.common.StandardCredentials;
-import hudson.FilePath;
 import hudson.model.Run;
 import hudson.model.TaskListener;
-import hudson.plugins.git.BranchSpec;
 import hudson.plugins.git.GitException;
 import hudson.plugins.git.GitSCM;
-import hudson.plugins.git.GitTool;
-import hudson.plugins.git.SubmoduleConfig;
-import hudson.plugins.git.UserRemoteConfig;
-import hudson.plugins.git.extensions.GitSCMExtension;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.jenkinsci.plugins.gitclient.CheckoutCommand;
-import org.jenkinsci.plugins.gitclient.Git;
 import org.jenkinsci.plugins.gitclient.GitClient;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class CheckoutOptionTest {
 
@@ -99,6 +92,12 @@ public class CheckoutOptionTest {
         @Override
         public CheckoutCommand lfsRemote(String lfsRemote) {
             throw new UnsupportedOperationException("Don't call me");
+        }
+
+        @Override
+        public CheckoutCommand lfsFetchOptions(String s, String s1) {
+            //return null;
+            throw new UnsupportedOperationException("Not implemented yet");
         }
 
         @Override

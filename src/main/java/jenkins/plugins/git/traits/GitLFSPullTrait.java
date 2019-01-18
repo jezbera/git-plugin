@@ -40,8 +40,8 @@ public class GitLFSPullTrait extends GitSCMExtensionTrait<GitLFSPull> {
      * Stapler constructor.
      */
     @DataBoundConstructor
-    public GitLFSPullTrait() {
-        super(new GitLFSPull());
+    public GitLFSPullTrait(GitLFSPull extension) {
+        super(extension);
     }
 
     /**
